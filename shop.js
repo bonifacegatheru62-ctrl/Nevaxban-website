@@ -1,6 +1,5 @@
  // Replace with your live Render/Railway server URL
-const BACKEND_URL = "https://nevaxban.onrender.com";
-
+const BACKEND_URL = "https://nevaxban.onrender.com"
 const state = {
   items: JSON.parse(localStorage.getItem("nvx_bag") || "[]"),
   phone: localStorage.getItem("nvx_phone") || "",
