@@ -9,6 +9,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=2" />
+    <style>
+    @media (max-width: 600px) {
+      html, body { max-width: 100%; overflow-x: hidden; }
+      #check-score-form { display: flex; flex-direction: column; width: 100%; gap: 0.5rem; }
+      #check-score-form input, #check-score-form button { width: 100%; min-width: 0; }
+      .card-body .row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.45rem !important;
+        width: 100% !important;
+      }
+      .card-body .row label,
+      .card-body .row select,
+      .card-body .row .add {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+      }
+    }
+  </style>
+
 </head>
 <body>
   <header class="header">
