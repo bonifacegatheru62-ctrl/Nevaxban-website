@@ -1,5 +1,29 @@
  // Replace with your live Render/Railway server URL
-const BACKEND_URL = "https://nevaxban.onrender.com"
+const BACKEND_URL = "https://onrender.com";
+
+// =========================================================================
+// EASY STOCK CONTROL: Type any sold-out shoe + color below to disable it!
+// Example: "Jordan 4 - Black Cat (Triple Black)",
+// =========================================================================
+const SOLD_OUT = [
+  // "Jordan 4 - Black Cat (Triple Black)",
+  // "Air Force - Triple Black",
+];
+
+// Authentic Nairobi Market Colorways per Shoe
+const SHOE_COLORS = {
+  "shoe-jordan1": ["Royal Toe (Blue/Black)", "Chicago (Red/White)", "Panda (Black/White)", "Dark Mocha", "University Blue"],
+  "shoe-jordan14": ["Black Toe (White/Black)", "Last Shot (Black/Red)", "Ferrari Red", "Oxidized Green"],
+  "shoe-jordan3": ["True Blue (White/Blue)", "White Cement", "Black Cement", "Fire Red"],
+  "shoe-nb9060": ["Sea Salt Cream", "Rain Cloud Grey", "Triple Black", "Quartz Grey"],
+  "shoe-clarks": ["Triple Black Suede", "Maple (Tan Suede)", "Dark Brown Leather", "Sand Suede"],
+  "shoe-jordan4": ["Military Black", "Bred Reimagined", "Black Cat (Triple Black)", "University Blue"],
+  "shoe-jordan6": ["Black Infrared", "Carmine (White/Red)", "UNC (White/Blue)", "Metallic Silver"],
+  "shoe-jordan9": ["Space Jam (White/Black)", "University Gold", "Chile Red", "Cool Grey"],
+  "shoe-airforce": ["Triple White", "Triple Black", "White / Black Swoosh", "Supreme White"],
+  "shoe-jordan11": ["Concord (White/Black)", "Bred (Black/Red)", "Cool Grey", "Jubilee"]
+};
+
 const state = {
   items: JSON.parse(localStorage.getItem("nvx_bag") || "[]"),
   phone: localStorage.getItem("nvx_phone") || "",
@@ -53,6 +77,46 @@ async function fetchVerifiedScores(phone) {
   }
 }
 
+// Automatically attach Color Dropdown & Stock Check to every shoe card
+function setupShoeColorsAndStock() {
+  document.querySelectorAll(".card").forEach((card) => {
+    const id = card.dataset.id;
+    const name = card.dataset.name;
+    const colors = SHOE_COLORS[id];
+    const row = card.querySelector(".row");
+    const addBtn = card.querySelector("[data-add]");
+    if (!colors || !row || !addBtn) return;
+
+    const colorLabel = document.createElement("label");
+    colorLabel.className = "color-label";
+    colorLabel.innerHTML = `Color <select class="color-select" aria-label="Color for ${name}">${colors
+      .map((c) => {
+        const key = `${name} - ${c}`;
+        const isOut = SOLD_OUT.some((s) => s.toLowerCase() === key.toLowerCase() || s.toLowerCase() === name.toLowerCase());
+        return `<option value="${c}" ${isOut ? "disabled" : ""}>${c}${isOut ? " (Out of Stock)" : ""}</option>`;
+      })
+      .join("")}</select>`;
+
+    row.insertBefore(colorLabel, row.firstChild);
+    const colorSelect = colorLabel.querySelector("select");
+
+    function checkAvailability() {
+      const chosenColor = colorSelect.value;
+      const key = `${name} - ${chosenColor}`;
+      const isOut = SOLD_OUT.some((s) => s.toLowerCase() === key.toLowerCase() || s.toLowerCase() === name.toLowerCase());
+      addBtn.disabled = isOut;
+      addBtn.textContent = isOut ? "Sold Out" : "Add";
+    }
+
+    // Select first available color if the default is sold out
+    const firstAvailable = Array.from(colorSelect.options).find((opt) => !opt.disabled);
+    if (firstAvailable) colorSelect.value = firstAvailable.value;
+
+    colorSelect.addEventListener("change", checkAvailability);
+    checkAvailability();
+  });
+}
+
 function renderBag() {
   const countEl = document.querySelector("[data-bag-count]");
   const linesEl = document.querySelector("#lines");
@@ -74,7 +138,7 @@ function renderBag() {
       <div class="line">
         <div>
           <strong>${item.name}</strong>
-          <p class="muted">Size ${item.size} · ${kes(item.price)}</p>
+          <p class="muted">${item.color ? item.color + " · " : ""}Size ${item.size} · ${kes(item.price)}</p>
         </div>
         <div class="line-actions">
           <button class="qty" type="button" onclick="changeQty(${idx}, -1)">-</button>
@@ -103,13 +167,15 @@ document.querySelectorAll("[data-add]").forEach((btn) => {
     const id = card.dataset.id;
     const name = card.dataset.name;
     const price = Number(card.dataset.price);
-    const size = card.querySelector("select")?.value || "40";
+    const color = card.querySelector(".color-select")?.value || "";
+    const selects = card.querySelectorAll("select");
+    const size = selects[selects.length - 1]?.value || "40";
 
-    const existing = state.items.find((i) => i.id === id && i.size === size);
+    const existing = state.items.find((i) => i.id === id && i.size === size && i.color === color);
     if (existing) {
       existing.qty += 1;
     } else {
-      state.items.push({ id, name, price, size, qty: 1 });
+      state.items.push({ id, name, color, price, size, qty: 1 });
     }
     saveBag();
     openBag();
@@ -130,7 +196,7 @@ function closeBag() {
 document.querySelectorAll("[data-open-bag]").forEach((b) => b.addEventListener("click", openBag));
 document.querySelectorAll("[data-close-bag]").forEach((b) => b.addEventListener("click", closeBag));
 
-// Checkout Form -> Calls Backend Equity Jenga STK Push
+// Checkout Form -> Calls Backend STK Push
 document.querySelector("#pay-form")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const note = document.querySelector("#pay-note");
@@ -169,7 +235,6 @@ document.querySelector("#pay-form")?.addEventListener("submit", async (event) =>
       note.textContent = "Prompt sent! Enter your M-Pesa PIN. Scores stay unchanged if canceled.";
     }
 
-    // Poll verified score from server after 12s and 25s to reflect confirmed payment
     setTimeout(() => fetchVerifiedScores(phone), 12000);
     setTimeout(() => fetchVerifiedScores(phone), 25000);
   } catch (err) {
@@ -189,6 +254,7 @@ document.querySelector("#check-score-form")?.addEventListener("submit", (e) => {
 });
 
 // Initialize on page load
+setupShoeColorsAndStock();
 renderBag();
 if (state.phone) {
   const phoneInput = document.querySelector("#phone");

@@ -12,7 +12,6 @@
 }
 
 * { box-sizing: border-box; }
-
 html { color-scheme: light; }
 
 body {
@@ -29,31 +28,17 @@ body {
 }
 
 @media (min-width: 720px) {
-  body {
-    background-attachment: fixed;
-  }
+  body { background-attachment: fixed; }
 }
 
 a { color: inherit; text-decoration: none; }
-
 button, select, input { font: inherit; }
-
 button { cursor: pointer; }
-
 button:disabled { cursor: not-allowed; opacity: 0.45; }
 
 :focus-visible {
   outline: 2px solid var(--sapphire);
   outline-offset: 2px;
-}
-
-.banner {
-  margin: 0;
-  background: var(--sapphire);
-  color: var(--surface);
-  text-align: center;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
 }
 
 .header {
@@ -79,9 +64,20 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--display);
   font-size: 1.35rem;
   line-height: 1;
+}
+
+.brand-logo {
+  height: 4.6rem;
+  width: auto;
+  object-fit: contain;
+  filter: invert(1);
+  mix-blend-mode: multiply;
 }
 
 .wordmark small {
@@ -95,10 +91,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 
 .actions { display: flex; align-items: center; gap: 0.5rem; }
-
-.score-pill, .bag-btn, .nav a, .add, .pay, .ghost {
-  min-height: 2.75rem;
-}
+.score-pill, .bag-btn, .nav a, .add, .pay, .ghost { min-height: 2.75rem; }
 
 .score-pill {
   display: flex;
@@ -112,7 +105,6 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 
 .score-pill span { font-size: 0.7rem; color: var(--muted); }
-
 .score-pill strong {
   font-family: var(--display);
   font-size: 1.15rem;
@@ -128,11 +120,9 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 
 .bag-btn { padding: 0 1rem; }
-
 .bag-btn:hover, .add:hover, .pay:hover { background: var(--ink); }
 
 .nav { display: flex; gap: 0.25rem; }
-
 .nav a {
   display: inline-flex;
   align-items: center;
@@ -163,9 +153,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 
 h1, h2, h3 { font-family: var(--display); font-weight: 560; }
-
 h1 { margin: 0.4rem 0 0; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 0.95; }
-
 .lede { max-width: 34rem; font-size: 1.125rem; color: var(--muted); }
 
 .hero-plates {
@@ -193,13 +181,13 @@ h1 { margin: 0.4rem 0 0; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 0.95;
 }
 
 .section { padding: 2.5rem 0 1rem; }
-
 .section h2 { margin: 0; font-size: 2rem; }
 
 .rail {
   display: grid;
   gap: 1rem;
   margin-top: 1.25rem;
+  align-items: stretch;
 }
 
 .card {
@@ -211,7 +199,9 @@ h1 { margin: 0.4rem 0 0; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 0.95;
 }
 
 .plate {
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
   color: var(--ink);
 }
 
@@ -219,6 +209,7 @@ h1 { margin: 0.4rem 0 0; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 0.95;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -241,12 +232,23 @@ h1 { margin: 0.4rem 0 0; font-size: clamp(3rem, 8vw, 4.5rem); line-height: 0.95;
 }
 
 .card h3 { margin: 0; font-size: 1.55rem; }
-
 .blurb, .muted { color: var(--muted); }
-
 .price { margin: 0; font-weight: 600; }
 
-.row { display: flex; gap: 0.5rem; align-items: end; }
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.card .color-label {
+  flex: 1 1 100%;
+}
+
+.card .color-label select {
+  width: 100%;
+}
 
 label { display: grid; gap: 0.25rem; font-size: 0.85rem; color: var(--muted); }
 
@@ -271,10 +273,39 @@ select, input {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 1.5rem 0 2rem;
+  padding: 1.5rem 0 1rem;
 }
 
 .footer .wordmark { font-size: 1.4rem; }
+
+.footer-social-bar {
+  margin-top: 0.5rem;
+  padding: 1rem 0 1.75rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ig-link svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
 
 .backdrop {
   position: fixed;
@@ -329,9 +360,7 @@ select, input {
 }
 
 .pay { width: 100%; }
-
 .note { min-height: 1.25rem; font-size: 0.9rem; }
-
 [hidden] { display: none !important; }
 
 @media (min-width: 720px) {
@@ -361,96 +390,115 @@ select, input {
 }
 
 .wa-btn svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; }
-.wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 
-.brand-logo {
-  height: 4.6rem;
-  width: auto;
-  object-fit: contain;
-  filter: invert(1);
-  mix-blend-mode: multiply;
-}
 /* Mobile Screen Polish + 2-Column Shoe Grid */
 @media (max-width: 600px) {
-  .bar {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
+  .bar { flex-wrap: wrap; gap: 0.5rem; }
+  .brand-logo { height: 2.8rem; }
+  .wordmark small { display: none; }
+  .actions { gap: 0.35rem; }
+  .wa-btn { padding: 0 0.65rem; font-size: 0.85rem; }
+  .score-pill { padding: 0.1rem 0.65rem; }
+  .bag-btn { padding: 0 0.75rem; font-size: 0.85rem; }
 
-  .brand-logo {
-    height: 2.8rem;
-  }
-
-  .wordmark small {
-    display: none;
-  }
-
-  .actions {
-    gap: 0.35rem;
-  }
-
-  .wa-btn {
-    padding: 0 0.65rem;
-    font-size: 0.85rem;
-  }
-
-  .score-pill {
-    padding: 0.1rem 0.65rem;
-  }
-
-  .bag-btn {
-    padding: 0 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  #check-score-form {
-    flex-wrap: wrap;
-  }
-
+  #check-score-form { flex-wrap: wrap; }
   #check-score-form input,
-  #check-score-form button {
-    width: 100%;
-    flex: 1 1 100%;
-  }
+  #check-score-form button { width: 100%; flex: 1 1 100%; }
 
-  /* 2-Column Side-by-Side Shoe Grid on Mobile */
   .rail {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.65rem;
   }
 
-  .card-body {
-    padding: 0.75rem;
-    gap: 0.35rem;
-  }
+  .card-body { padding: 0.75rem; gap: 0.35rem; }
+  .card h3 { font-size: 1.15rem; }
+  .blurb { font-size: 0.8rem; line-height: 1.35; }
+  .price { font-size: 0.95rem; }
+  .row { flex-direction: column; align-items: stretch; gap: 0.4rem; }
+  select, .add { width: 100%; min-height: 2.4rem; }
+}
+/* Clothes Coming Soon Editorial Showcase */
+.clothes-showcase {
+  margin-top: 2.25rem;
+  padding: 3.25rem 1.75rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(215, 230, 246, 0.92) 100%);
+  border: 1px solid var(--line);
+  text-align: center;
+  box-shadow: 0 20px 44px rgba(12, 35, 64, 0.1);
+}
 
-  .card h3 {
-    font-size: 1.15rem;
-  }
+.capsule-pill {
+  display: inline-block;
+  padding: 0.38rem 1rem;
+  border-radius: 999px;
+  background: var(--sapphire);
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
 
-  .blurb {
-    font-size: 0.8rem;
-    line-height: 1.35;
-  }
+.clothes-showcase h1 {
+  margin: 0.9rem 0 0;
+  font-size: clamp(2.8rem, 6.5vw, 4.6rem);
+  line-height: 0.98;
+}
 
-  .price {
-    font-size: 0.95rem;
-  }
+.clothes-showcase h1 span {
+  color: var(--sapphire);
+}
 
-  .card .row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.4rem;
-  }
+.clothes-lede {
+  max-width: 38rem;
+  margin: 1.1rem auto 0;
+  font-size: 1.08rem;
+  color: var(--muted);
+}
 
-  .card select,
-  .card .add {
-    width: 100%;
-    min-height: 2.35rem;
-    padding: 0 0.5rem;
-  }
+.clothes-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.clothes-btn-primary, .clothes-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+  font-weight: 600;
+}
+
+.capsule-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.75rem;
+  text-align: left;
+}
+
+.capsule-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.capsule-card h3 {
+  margin: 0.15rem 0;
+  font-size: 1.35rem;
+}
+
+.capsule-card p {
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .clothes-showcase { padding: 4rem 3rem; }
+  .capsule-grid { grid-template-columns: repeat(3, 1fr); }
 }
