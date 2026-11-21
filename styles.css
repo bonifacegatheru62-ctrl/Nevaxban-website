@@ -531,3 +531,21 @@ select, input {
   .row { flex-direction: column; align-items: stretch; gap: 0.4rem; }
   select, .add { width: 100%; min-height: 2.4rem; }
 }
+/* Stack Color, Size, and Add button vertically inside mobile cards */
+@media (max-width: 600px) {
+  .card-body .row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .card-body .row label,
+  .card-body .row select,
+  .card-body .row .add {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+}
